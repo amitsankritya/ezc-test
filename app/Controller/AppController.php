@@ -31,5 +31,24 @@ App::uses('Controller', 'Controller');
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $components = array('DebugKit.Toolbar');
+	public $components = array(
+		'DebugKit.Toolbar',
+		'Flash',
+		'Session',
+		'Auth' => array(
+			'loginRedirect' => array('controller' => 'users', 'action' => 'display', 'home'),
+			'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
+			'authenticate' => array(
+				'Form' => array(
+					'fields' => array('username' => 'email') // Assuming email is used for authentication
+				)
+			)
+		),
+		'Security'
+	);
+
+	public function beforeFilter() {
+		//$this->Security->requireSecure(); // Redirects non-HTTPS requests to HTTPS
+		$this->Security->csrfCheck = true; // Enables CSRF protection
+	}
 }
