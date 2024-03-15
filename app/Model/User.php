@@ -39,7 +39,11 @@ class User extends AppModel {
 			'email' => array(
 				'rule' => 'email',
 				'message' => 'Please enter a valid email address'
-			)
+			),
+			'unique' => array(
+				'rule'    => array('isUniqueEmail'),
+				'message' => 'This email is already in use',
+			),
 		),
 		'password' => array(
 			'length' => array(
@@ -82,6 +86,35 @@ class User extends AppModel {
 
 		// Compare the two values and return true if they match, false otherwise
 		return $confirmPasswordValue === $originalPasswordValue;
+	}
+
+	function isUniqueEmail($check) {
+
+		$email = $this->find(
+			'first',
+			array(
+				'fields' => array(
+					'User.id', 'User.email'
+				),
+				'conditions' => array(
+					'User.email' => $check['email']
+				)
+			)
+		);
+
+		if(!empty($email)){
+			if(isset($this->data[$this->alias]['id'])) {
+				if($this->data[$this->alias]['id'] == $email['User']['id']){
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
 	}
 
 	public function beforeSave($options = array()) {

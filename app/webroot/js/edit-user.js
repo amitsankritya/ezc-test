@@ -1,22 +1,23 @@
 $(document).ready(function() {
-	$('#signup-button').click(function(e) {
+	$('#edit-button').click(function(e) {
 		e.preventDefault();
 
 		if (!validateForm()) {
 			return false;
 		}
 
-		var formData = $('#signup-form').serialize();
+		var formData = $('#edit-user').serialize();
+		var UserId = $('#UserId').val().trim();
 
 		$.ajax({
-			type: 'POST',
-			url: 'users/add',
+			type: 'PUT',
+			url: '',
 			data: formData,
 			dataType: 'json',
 			success: function(response) {
 				if (response.success) {
-					//console.log(response);
-					window.location.href = '';
+					console.log(response);
+					window.location.href = response.redirectUrl;
 				} else {
 					//alert('Error: ' + response.message);
 					// $.each(response, function( index, value ) {
@@ -67,24 +68,6 @@ function validateForm() {
 		isValid = false;
 	} else if (!/\S+@\S+\.\S+/.test(email)) {
 		$('#email + .text-danger').text('Please enter a valid email');
-		isValid = false;
-	}
-
-	password = $('#password').val().trim();
-	if (password === '') {
-		$('#password + .text-danger').text('Please enter Password.');
-		isValid = false;
-	} else if (password.length < 6 || password.length > 20) {
-		$('#password + .text-danger').text('Password must be between 6 and 20 characters long.');
-		isValid = false;
-	}
-
-	var confirmPassword = $('#confirm_password').val().trim();
-	if (confirmPassword === '') {
-		$('#confirm_password + .text-danger').text('Please confirm Password.');
-		isValid = false;
-	} else if (password !== confirmPassword) {
-		$('#confirm_password + .text-danger').text('Passwords do not match.');
 		isValid = false;
 	}
 

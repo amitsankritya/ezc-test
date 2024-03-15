@@ -30,7 +30,9 @@
 	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout', 'home'));
 	Router::connect('/signup', array('controller' => 'users', 'action' => 'signup'));
 	Router::connect('/add', array('controller' => 'users', 'action' => 'add', 'home'));
-	Router::connect('/users/view', array('controller' => 'users', 'action' => 'view'));
+	Router::connect('/users/index', array('controller' => 'users', 'action' => 'index'));
+	Router::connect('/users/edit/:id', array('controller' => 'users', "action" => "edit", "[method]" => "PUT"), array("id" => "[0-9]+", 'pass' => array('id'),));
+	Router::connect('/users/delete/:id', array('controller' => 'users', "action" => "delete", "[method]" => "POST"), array("id" => "[0-9]+", 'pass' => array('id'),));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

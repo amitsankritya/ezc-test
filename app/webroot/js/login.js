@@ -15,8 +15,8 @@ $(document).ready(function() {
 			dataType: 'json',
 			success: function(response) {
 				if (response.success) {
-					//alert('login');
-					window.location.href = '/';
+					console.log(response);
+					window.location.href = response.redirectUrl;
 				} else {
 					//alert('Error: ' + response.message);
 				}
