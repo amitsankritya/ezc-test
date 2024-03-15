@@ -16,11 +16,37 @@ class UsersController extends AppController {
 	public $components = array('Paginator');
 
 	public function beforeFilter() {
-		$this->Auth->allow('signup');
+		parent::beforeFilter();
+
+		$this->Auth->allow('signup', 'add');
 	}
 
 	public function login() {
+		$response = array();
+		if ($this->request->is('ajax')) {
+			$this->autoRender = false;
+			$this->layout = 'ajax';
+			if ($this->request->is('post')) {
+				if ($this->Auth->login()) {
+					$response['success'] = true;
+					$response['message'] = 'LoggedIn successfully.';
+				} else {
+					$response['success'] = false;
+					$response['message'] = 'Invalid username or password';
+				}
+			} else {
+				$response['success'] = false;
+				$response['message'] = 'Method not allowed';
+			}
+		}
 
+		//$this->response->type('json');
+		$this->response->body(json_encode($response));
+	}
+
+	public function logout() {
+		$this->Auth->logout();
+		$this->redirect('/');
 	}
 
 	public function signup() {
@@ -57,7 +83,42 @@ class UsersController extends AppController {
  * @return void
  */
 	public function add() {
-		if ($this->request->is('post')) {
+		$response = array();
+		if ($this->request->is('ajax')) {
+			$this->autoRender = false;
+			$this->layout = 'ajax';
+			if ($this->request->is('post')) {
+				$this->User->set($this->request->data);
+				if ($this->User->validates()) {
+					$this->User->create();
+					$this->request->data['Users']['created_at'] = date('Y-m-d H:i:s');
+					if ($this->User->save($this->request->data)) {
+						//$this->render('view');
+						$response['success'] = true;
+						$response['message'] = 'User registered successfully.';
+					} else {
+						$response['success'] = false;
+						$response['message'] = 'Error occurred while saving user data.';
+					}
+				} else {
+					$errors = array();
+					foreach ($this->validationErrors['User'] as $validationError) {
+						$errors[] = $validationError;
+					}
+
+					$response['success'] = false;
+					$response['message'] = $errors;
+				}
+			}
+		} else {
+			$this->Flash->set('Invalid request.', array('class' => 'alert alert-danger'));
+			$this->redirect(array('controller' => 'users', 'action' => 'login'));
+		}
+
+		$this->response->type('json');
+		$this->response->body(json_encode($response));
+
+		/*if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
 				$this->Flash->success(__('The user has been saved.'));
@@ -65,7 +126,7 @@ class UsersController extends AppController {
 			} else {
 				$this->Flash->error(__('The user could not be saved. Please, try again.'));
 			}
-		}
+		}*/
 	}
 
 /**

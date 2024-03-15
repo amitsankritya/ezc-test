@@ -33,19 +33,20 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->Html->css('app');
 
 		echo $this->fetch('script');
-		echo $this->Html->script('bootstrap.min')
+		echo $this->Html->script('bootstrap.min');
+		//echo $this->Js->writeBuffer();
 	?>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-custom-navbar">
 		<div class="container">
 			<a class="navbar-brand" href="#">
-				<?php echo $this->Html->link('EZC Assessment', array('controller' => 'pages', 'action' => 'display', 'home')); ?>
+				<?php echo $this->Html->link('EZC Assessment', array('controller' => 'users', 'action' => 'view', 'home'), array('class' => 'nav-link')); ?>
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse d-flex ms-auto" id="navbarNav">
+			<div class="collapse navbar-collapse d-flex" id="navbarNav">
 				<ul class="navbar-nav">
 <!--					<li class="nav-item">-->
 <!--						--><?php //echo $this->Html->link('Home', array('controller' => 'pages', 'action' => 'display', 'home'), array('class' => 'nav-link')); ?>
@@ -54,7 +55,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <!--						--><?php //echo $this->Html->link('About', array('controller' => 'pages', 'action' => 'display', 'about'), array('class' => 'nav-link')); ?>
 <!--					</li>-->
 					<li class="nav-item">
-						<?php echo $this->Html->link('Signup', array('controller' => 'users', 'action' => 'signup'), array('class' => 'nav-link')); ?>
+						<?php
+						if (AuthComponent::user()) {
+							echo $this->Form->postLink(__('Logout'), array('action' => 'logout',), array('class' => 'nav-link'), array('confirm' => __('Are you sure you want to logout # %s?')));
+						}
+
+						?>
 					</li>
 				</ul>
 			</div>
@@ -66,7 +72,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $this->fetch('content'); ?>
 	</div>
 
-	<footer class="bg-dark text-white text-center py-3">
+	<footer class="bg-dark text-white text-center py-3 footer">
 		<div class="container">
 			&copy; <?php echo date('Y'); ?> EZC Assessment
 		</div>

@@ -1,6 +1,6 @@
 html,
 body {
-	height: 100%;
+	min-height: 800px;
 	margin: 0;
 }
 
@@ -13,18 +13,19 @@ body {
 }
 
 .footer {
-	margin-top: auto;
+	margin-top: 100px;
 }
 
 .btn-lg {
 	padding: 10px 20px;
-	font-size: 1.25rem; /* Adjust as needed */
+	font-size: 1.25rem;
 }
 
 .display-2 {
-	font-size: 3rem; /* Adjust as needed */
+	font-size: 3rem;
 }
 
 .bg-custom-navbar {
-	background-color: #17bb8d; /* Adjust the color code as needed */
+	height: 60px;
+	background-color: #17bb8d;
 }
