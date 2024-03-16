@@ -22,7 +22,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php //echo $cakeDescription ?>:
+		<?php echo $cakeDescription ?>:
 		<?php //echo $this->fetch('title'); ?>
 	</title>
 	<?php
@@ -38,7 +38,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	?>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-custom-navbar">
+	<nav class="navbar navbar-expand-lg d-lg-flex navbar-dark bg-custom-navbar">
 		<div class="container">
 			<a class="navbar-brand" href="#">
 				<?php echo $this->Html->link('EZC Assessment', array('controller' => 'users', 'action' => 'index'), array('class' => 'nav-link')); ?>
@@ -46,22 +46,20 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse d-flex" id="navbarNav">
-				<ul class="navbar-nav">
-<!--					<li class="nav-item">-->
-<!--						--><?php //echo $this->Html->link('Home', array('controller' => 'pages', 'action' => 'display', 'home'), array('class' => 'nav-link')); ?>
-<!--					</li>-->
-<!--					<li class="nav-item">-->
-<!--						--><?php //echo $this->Html->link('About', array('controller' => 'pages', 'action' => 'display', 'about'), array('class' => 'nav-link')); ?>
-<!--					</li>-->
-					<li class="nav-item">
-						<?php
-						if (AuthComponent::user()) {
-							echo $this->Form->postLink(__('Logout'), array('action' => 'logout',), array('class' => 'nav-link'), array('confirm' => __('Are you sure you want to logout # %s?')));
-						}
-
-						?>
-					</li>
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav justify-content-end">
+					<?php if (AuthComponent::user()) { ?>
+						<li class="nav-item">
+							<?php echo $this->Form->postLink(__('Logout'), array('action' => 'logout'), array('confirm' => 'Are you sure you want to logout?')); ?>
+						</li>
+					<?php } else { ?>
+						<li class="nav-item">
+							<?php echo $this->Html->link('SignIn', array('controller' => 'users', 'action' => 'login'), array('class' => 'nav-link')); ?>
+						</li>
+						<li class="nav-item">
+							<?php echo $this->Html->link('Register', array('controller' => 'users', 'action' => 'signup'), array('class' => 'nav-link')); ?>
+						</li>
+					<?php } ?>
 				</ul>
 			</div>
 		</div>

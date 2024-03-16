@@ -66,7 +66,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->User->recursive = 1;
+		$this->User->recursive = 0;
 		$this->paginate = array(
 			'limit' => 5
 		);
@@ -95,12 +95,14 @@ class UsersController extends AppController {
  */
 	public function add() {
 		$response = array();
+		if (AuthComponent::user()) {
+			$this->Flash->error(__('Logged in user can not register again'));
+		}
+
 		if ($this->request->is('ajax')) {
 			$this->autoRender = false;
 			$this->layout = 'ajax';
 			if ($this->request->is('post')) {
-				$this->request->data['Users']['created_at'] = date('Y-m-d H:i:s');
-				$this->request->data['Users']['is_admin'] = 0;
 				$this->User->set($this->request->data);
 				if ($this->User->validates()) {
 					$this->User->create();
@@ -152,21 +154,35 @@ class UsersController extends AppController {
 			if (!$this->User->exists($id)) {
 				throw new NotFoundException(__('Invalid user'));
 			}
+
 			if ($this->request->is(array('post', 'put'))) {
-				if ($this->User->save($this->request->data)) {
-					$response['success'] = true;
-					$response['redirectUrl'] = router::url ("/users",array("controller" => "users", "action" => "index"));
-					$response['message'] = 'User registered successfully.';
-					$this->response->type('json');
-					$this->response->body(json_encode($response));
-					//$this->Flash->success(__('The user has been saved.'));
+				$this->User->set($this->request->data);
+				if($this->User->validates()) {
+					if ($this->User->save($this->request->data)) {
+						$response['success'] = true;
+						$response['redirectUrl'] = router::url ("/users",array("controller" => "users", "action" => "index"));
+						$response['message'] = 'User updated successfully.';
+					} else {
+						$this->Flash->error(__('The user could not be saved. Please, try again.'));
+					}
 				} else {
-					$this->Flash->error(__('The user could not be saved. Please, try again.'));
+					$errors = array();
+					foreach ($this->User->validationErrors as $field => $error) {
+						$errors[$field] = $error;
+					}
+
+					$response['success'] = false;
+					$response['message'] = $errors;
 				}
+
 			} else {
 				$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 				$this->request->data = $this->User->find('first', $options);
 			}
+
+			$this->response->type('json');
+			$this->response->body(json_encode($response));
+
 		} else {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 			$this->request->data = $this->User->find('first', $options);
@@ -182,18 +198,22 @@ class UsersController extends AppController {
  */
 	public function delete($id = null) {
 		if (!AuthComponent::user('is_admin')) {
-			$this->Flash->error(__('Unauthorised Access'));
+			$this->Flash->error(__('Unauthorised Access!'));
 			return $this->redirect(array('action' => 'index'));
 		}
+
+		if (AuthComponent::user('id') == $id) {
+			$this->Flash->error(__('A user can not delete itself.'));
+			return $this->redirect(array('action' => 'index'));
+		}
+
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$this->request->allowMethod('post');
-		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
-		$this->request->data = $this->User->find('first', $options);
-		$this->request->data['Users']['deleted_at'] = date('YYYY-DD-MM HH:MM:SS');
 
-		if ($this->User->save($this->request->data)) {
+		$this->request->allowMethod('post');
+
+		if ($this->User->delete($id, false)) {
 			$this->Flash->success(__('The user has been deleted.'));
 		} else {
 			$this->Flash->error(__('The user could not be deleted. Please, try again.'));

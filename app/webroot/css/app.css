@@ -1,6 +1,6 @@
 html,
 body {
-	min-height: 800px;
+	min-height: 1000px;
 	margin: 0;
 }
 
@@ -28,4 +28,13 @@ body {
 .bg-custom-navbar {
 	height: 60px;
 	background-color: #17bb8d;
+}
+.navbar-expand-lg .navbar-collapse {
+	justify-content: end !important;
+}
+.nav-item {
+	color: #FFFFFF !important;
+}
+.error {
+	color: red !important;
 }

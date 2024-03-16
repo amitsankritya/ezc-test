@@ -1,11 +1,17 @@
 <?php
 App::uses('AppModel', 'Model');
 App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
+App::uses('SoftDeleteTrait', 'SoftDeleteTrait.Lib');
 /**
  * User Model
  *
  */
 class User extends AppModel {
+	use SoftDeleteTrait;
+
+	protected function _deletedFieldName() {
+		return 'deleted';
+	}
 
 /**
  * Validation rules
@@ -62,12 +68,8 @@ class User extends AppModel {
 				'rule' => array('maxLength', 300),
 				'message' => 'Address must be less than 300 characters long'
 			),
-			'alphanumeric' => array(
-				'rule' => 'alphaNumeric',
-				'message' => 'Address must be alphanumeric'
-			),
 			'allowedSpecialChars' => array(
-				'rule' => array('custom', '/^[a-zA-Z0-9\/]*$/'),
+				'rule' => array('custom', '/^[a-zA-Z0-9\/. ]*$/'),
 				'message' => 'No special characters are allowed except forward slash (/)'
 			)
 		),

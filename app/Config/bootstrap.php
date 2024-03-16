@@ -68,6 +68,8 @@ Cache::config('default', array('engine' => 'File'));
  */
 
 CakePlugin::load('DebugKit');
+CakePlugin::load('SoftDeleteTrait');
+//CakePlugin::load('CakeSoftDelete');
 
 /**
  * To prefer app translation over plugin translation, you can set

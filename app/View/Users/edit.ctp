@@ -19,7 +19,48 @@ echo $this->Html->script('edit-user', false);
 			echo $this->Form->input('email', array('div' => false, 'class' => 'form-control', 'id' => 'email'));
 			echo $this->Form->input('phone_number', array('div' => false, 'class' => 'form-control', 'id' => 'phone_number'));
 			echo $this->Form->input('address', array('div' => false, 'class' => 'form-control', 'id' => 'address'));
-			echo $this->Form->input('state', array('div' => false, 'class' => 'form-control', 'id' => 'state'));
+			echo $this->Form->input('state', array(
+					'options' => array(
+						'Andhra Pradesh' => 'Andhra Pradesh',
+						'Arunachal Pradesh' => 'Arunachal Pradesh',
+						'Assam' => 'Assam',
+						'Bihar' => 'Bihar',
+						'Chhattisgarh' => 'Chhattisgarh',
+						'Goa' => 'Goa',
+						'Gujarat' => 'Gujarat',
+						'Haryana' => 'Haryana',
+						'Himachal Pradesh' => 'Himachal Pradesh',
+						'Jharkhand' => 'Jharkhand',
+						'Karnataka' => 'Karnataka',
+						'Kerala' => 'Kerala',
+						'Madhya Pradesh' => 'Madhya Pradesh',
+						'Maharashtra' => 'Maharashtra',
+						'Manipur' => 'Manipur',
+						'Meghalaya' => 'Meghalaya',
+						'Mizoram' => 'Mizoram',
+						'Nagaland' => 'Nagaland',
+						'Odisha' => 'Odisha',
+						'Punjab' => 'Punjab',
+						'Rajasthan' => 'Rajasthan',
+						'Sikkim' => 'Sikkim',
+						'Tamil Nadu' => 'Tamil Nadu',
+						'Telangana' => 'Telangana',
+						'Tripura' => 'Tripura',
+						'Uttar Pradesh' => 'Uttar Pradesh',
+						'Uttarakhand' => 'Uttarakhand',
+						'West Bengal' => 'West Bengal',
+						'Andaman and Nicobar Islands' => 'Andaman and Nicobar Islands',
+						'Chandigarh' => 'Chandigarh',
+						'Dadra and Nagar Haveli' => 'Dadra and Nagar Haveli',
+						'Daman and Diu' => 'Daman and Diu',
+						'Lakshadweep' => 'Lakshadweep',
+						'Delhi' => 'Delhi',
+						'Puducherry' => 'Puducherry',
+					),
+					'div' => false,
+					'class' => 'form-control',
+					'id' => 'state'
+			));
 			echo $this->Form->input('is_admin', array('id' => 'is_admin'));
 			?>
 			<div class="form-group"> <!-- Bootstrap form group class -->
