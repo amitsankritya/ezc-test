@@ -64,7 +64,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</div>
 		</div>
 	</nav>
-	<div class="container mt-4">
+	<div class="container cp-container-fluid mt-4">
 		<?php echo $this->Flash->render(); ?>
 		<?php echo $this->Session->flash(); ?>
 		<?php echo $this->fetch('content'); ?>
